@@ -41,7 +41,7 @@ public class MoviePoster extends ArrayList<MoviePoster> {
     public Uri getMoviePosterUri(String imageSrc){
         // Construct the URL for themoviedb.org query
         // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-        final String API_SIZE = "w185"; // recommended
+        final String API_SIZE = "w500"; // recommended
         final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
         Uri imageUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
@@ -50,5 +50,4 @@ public class MoviePoster extends ArrayList<MoviePoster> {
                 .build();
         return imageUri;
     }
-
 }

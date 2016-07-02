@@ -14,8 +14,6 @@ import java.util.List;
 public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
     private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
 
-    Activity context;
-
     /**
      * @param context        The current context. Used to inflate the layout file.
      * @param moviePosters A List of MoviePoster objects to display in a list
@@ -50,7 +48,7 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_movie_grid, parent, false);
         }
 
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_icon);
+        ImageView iconView = (ImageView) convertView.findViewById(R.id.movie_poster);
         Picasso.with(getContext()).load(moviePoster.imgSrc).into(iconView);
         return convertView;
     }
