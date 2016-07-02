@@ -35,11 +35,21 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+        if (id == R.id.action_popular) {
+            reloadMovies("popular");
             return true;
         }
+        if (id == R.id.action_top_rated) {
+            reloadMovies("top_rated");
 
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+    private void reloadMovies(String sortBy){
+        Intent intent = getIntent();
+        intent.putExtra(Intent.EXTRA_TEXT,sortBy);
+        finish();
+        startActivity(intent);
     }
 }

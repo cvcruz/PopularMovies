@@ -1,11 +1,9 @@
 package com.cecilevcruz.popularmovies;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +29,7 @@ import java.util.ArrayList;
 
 public class MoviePosterFragment extends Fragment{
 
-    MoviePoster moviePosters;
-
     protected MoviePosterAdapter movieAdapter;
-
 
     public MoviePosterFragment() {
     }
@@ -80,9 +75,10 @@ public class MoviePosterFragment extends Fragment{
         });
         return rootView;
     }
-    private void updateMovies(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String searchBy = prefs.getString(getString(R.string.pref_search_key),getString(R.string.pref_search_default));
+    private void updateMovies(String searchBy){
+
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //String searchBy = prefs.getString(getString(R.string.pref_search_key),getString(R.string.pref_search_default));
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
         fetchMoviesTask.execute(searchBy);
     }
@@ -90,12 +86,19 @@ public class MoviePosterFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        updateMovies();
+        String searchBy = getString(R.string.pref_search_default);
+        Intent intent = getActivity().getIntent();
+        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            searchBy = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Log.v("*************", " intent searchby " + searchBy);
+        }
+        Log.v("*************", " searchby " + searchBy);
+        updateMovies(searchBy);
     }
     public class FetchMoviesTask extends AsyncTask<String, Void, JSONArray>{
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
-        private JSONArray getMovieDBDataFromJson(String moviesJsonStr, int numDays)
+        private JSONArray getMovieDBDataFromJson(String moviesJsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -119,10 +122,8 @@ public class MoviePosterFragment extends Fragment{
             // Will contain the raw JSON response as a string.
             String movieDBJsonStr = null;
 
-            int numMovies = 10;
             try {
 
-                final String API_SORTBY = "sort_by";
                 final String API_KEY = "api_key";
                 final String BASE_URL = "http://api.themoviedb.org/3/movie";
 
@@ -179,7 +180,7 @@ public class MoviePosterFragment extends Fragment{
 
             try {
                 //Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
-                return getMovieDBDataFromJson(movieDBJsonStr, numMovies);
+                return getMovieDBDataFromJson(movieDBJsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
