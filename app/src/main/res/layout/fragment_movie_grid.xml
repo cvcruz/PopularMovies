@@ -11,17 +11,12 @@
     <GridView android:id="@+id/gridview_movies"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:numColumns="auto_fit"
+        android:numColumns="4"
         android:clickable="true"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
-
-
-        android:gravity="center">
-
-
-
-    </GridView>
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="7dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 
     <ImageView
         android:id="@+id/list_item_icon"

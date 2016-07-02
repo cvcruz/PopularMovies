@@ -88,7 +88,7 @@ public class MovieDetailActivity extends ActionBarActivity {
                 double avgVote = intent.getDoubleExtra(Intent.EXTRA_TEXT + "_avgVote",0);
                 String releaseDate = intent.getStringExtra(Intent.EXTRA_TEXT + "_releaseDate");
 
-                Picasso.with(getContext()).load(posterUri).into((ImageView) rootView.findViewById(R.id.detail_poster));
+                Picasso.with(getContext()).load(posterUri).resize(350,350).centerCrop().into((ImageView) rootView.findViewById(R.id.detail_poster));
                 ((TextView) rootView.findViewById(R.id.detail_title)).setText(title);
                 ((TextView) rootView.findViewById(R.id.detail_overview)).setText(overview);
                 ((TextView) rootView.findViewById(R.id.detail_avgVote)).setText("Average Vote: " + avgVote);

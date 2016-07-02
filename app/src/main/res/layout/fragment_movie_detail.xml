@@ -1,32 +1,45 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:isScrollContainer="true"
+    android:scrollbars="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:orientation="vertical"
+    android:isScrollContainer="true"
     android:scrollbars="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="16dp"
     tools:context=".MovieDetailActivity$MovieDetailFragment">
 
     <ImageView
         android:id="@+id/detail_poster"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content" />
+        android:layout_height="350dp"
+        android:layout_width="match_parent"
+        android:paddingTop="16dp" />
 
     <TextView android:id="@+id/detail_title"
         android:text="@string/hello_blank_fragment"
         android:layout_below="@+id/detail_poster"
         android:paddingTop="5dp"
         android:textStyle="bold"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 
     <TextView android:id="@+id/detail_avgVote"
         android:paddingTop="5dp"
-        android:layout_below="@+id/detail_poster"
-        android:layout_toRightOf="@+id/detail_title"
+        android:layout_below="@+id/detail_title"
+
         android:gravity="right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -43,3 +56,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
+</ScrollView>
