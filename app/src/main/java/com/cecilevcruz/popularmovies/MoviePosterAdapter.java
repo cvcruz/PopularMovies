@@ -2,7 +2,6 @@ package com.cecilevcruz.popularmovies;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
         // Gets the moviePoster object from the ArrayAdapter at the appropriate position
         MoviePoster moviePoster = getItem(position);
 
+
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
         // If not, this view already has the layout inflated from a previous call to getView,
@@ -63,9 +63,8 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
                 .appendPath(API_SIZE)
                 .appendEncodedPath(moviePoster.imgSrc)
                 .build();
-        Log.v(LOG_TAG,"img uri:" + imageUri);
+        //Log.v(LOG_TAG,"img uri:" + imageUri);
         Picasso.with(getContext()).load(imageUri).into(iconView);
-
         return convertView;
     }
 }

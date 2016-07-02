@@ -3,7 +3,7 @@ package com.cecilevcruz.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends ActionBarActivity {
 
     private ShareActionProvider mShareActionProvider;
 
@@ -64,23 +64,23 @@ public class MovieDetailActivity extends AppCompatActivity {
     public static class MovieDetailFragment extends Fragment {
         private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
-        private String mForecastStr;
+        private String movieInfoStr;
 
         public MovieDetailFragment() {
-            setHasOptionsMenu(true);
+
+
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.activity_detail, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
             Intent intent = getActivity().getIntent();
+
             if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                String forecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-                mForecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-                ((TextView) rootView.findViewById(R.id.detail_text))
-                        .setText(mForecastStr);
+                movieInfoStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+                ((TextView) rootView.findViewById(R.id.detail_text)).setText(movieInfoStr);
             }
             return rootView;
         }

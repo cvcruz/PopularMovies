@@ -72,11 +72,13 @@ public class MoviePosterFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(movieAdapter);
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                String title = movieAdapter.getItem(i).imgSrc;
+                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, title);
+                startActivity(movieDetailIntent);
             }
         });
         return rootView;
@@ -195,10 +197,10 @@ public class MoviePosterFragment extends Fragment{
             }
 
             try {
-                Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
+                //Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
                 return getMovieDBDataFromJson(movieDBJsonStr, numMovies);
             } catch (JSONException e) {
-                Log.e(LOG_TAG, " line 222:" + e.getMessage(), e);
+                Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
             return null;
