@@ -1,65 +1,70 @@
 package com.cecilevcruz.popularmovies;
 
-import android.content.Context;
+import android.app.Activity;
 import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-/**
- * Created by cecicruz on 7/1/16.
- */
-public class MoviePosterAdapter extends BaseAdapter{
-    private Context mpContext;
+import com.squareup.picasso.Picasso;
 
-    public MoviePosterAdapter(Context context){
-        mpContext = context;
+import java.util.List;
+
+class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
+    private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
+
+    /**
+     * @param context        The current context. Used to inflate the layout file.
+     * @param moviePosters A List of MoviePoster objects to display in a list
+     */
+    public MoviePosterAdapter(Activity context, List<MoviePoster> moviePosters) {
+        // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
+        // the second argument is used when the ArrayAdapter is populating a single TextView.
+        // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
+        // going to use this second argument, so it can be any value. Here, we used 0.
+        super(context, 0, moviePosters);
     }
 
-    public int getCount(){
-        return moviePosters.length;
-    }
-
-    public Object getItem(int position){
-        return null;
-    }
-
-    public long getItemId(int position){
-        return 0;
-    }
-
-    // create a new ImageView for each item referenced by the Adapter
+    /**
+     * Provides a view for an AdapterView (ListView, GridView, etc.)
+     *
+     * @param position    The AdapterView position that is requesting a view
+     * @param convertView The recycled view to populate.
+     *                    (search online for "android view recycling" to learn more)
+     * @param parent The parent ViewGroup that is used for inflation.
+     * @return The View for the position in the AdapterView.
+     */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.v("MOVIEPOSTESRADAPTER:", String.valueOf(this.getMoviePosters().length));
-        ImageView imageView;
+        // Gets the moviePoster object from the ArrayAdapter at the appropriate position
+        MoviePoster moviePoster = getItem(position);
+
+        // Adapters recycle views to AdapterViews.
+        // If this is a new View object we're getting, then inflate the layout.
+        // If not, this view already has the layout inflated from a previous call to getView,
+        // and we modify the View widgets as usual.
         if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mpContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_movie_grid, parent, false);
         }
-        //final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-        final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
 
-       // Uri builtUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
-        //        .appendPath()
-        //        .build();
-        Uri posterURI = Uri.parse(IMAGE_BASE_URL);
-        imageView.setImageURI(posterURI);
-        return imageView;
-    }
-    protected String[] moviePosters;
+        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_icon);
 
-    public void setMoviePosters(String[] moviePostersArray){
-        moviePosters = moviePostersArray;
-    }
-    public String[] getMoviePosters(){
-        return moviePosters;
+        // Construct the URL for themoviedb.org query
+        // https://api.themoviedb.org/3/movie/550?api_key=###
+        // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
+        final String API_SIZE = "w185"; // recommended
+        final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
+
+        Uri imageUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
+                .appendPath(API_SIZE)
+                .appendEncodedPath(moviePoster.imgSrc)
+                .build();
+        Log.v(LOG_TAG,"img uri:" + imageUri);
+        Picasso.with(getContext()).load(imageUri).into(iconView);
+
+        return convertView;
     }
 }

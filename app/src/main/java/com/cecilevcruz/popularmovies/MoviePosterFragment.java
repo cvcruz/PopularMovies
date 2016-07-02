@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -28,12 +28,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MovieFragment extends Fragment{
+public class MoviePosterFragment extends Fragment{
 
-    protected ArrayAdapter<String> movieAdapter;
+    MoviePoster moviePosters;
+/*
+    MoviePoster[] moviePosters = {
+            new MoviePoster( R.drawable.cupcake),
+            new MoviePoster( R.drawable.donut),
+            new MoviePoster( R.drawable.eclair),
+            new MoviePoster( R.drawable.froyo),
+            new MoviePoster( R.drawable.gingerbread),
+            new MoviePoster( R.drawable.honeycomb),
+            new MoviePoster( R.drawable.icecream),
+            new MoviePoster( R.drawable.jellybean),
+            new MoviePoster( R.drawable.kitkat),
+            new MoviePoster( R.drawable.lollipop)
+    };
+*/
+    protected MoviePosterAdapter movieAdapter;
+   // protected MoviePosterAdapter movieAdapter;
     //protected MoviePosterAdapter movieAdapter;
 
-    public MovieFragment() {
+    public MoviePosterFragment() {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,14 +87,20 @@ public class MovieFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        movieAdapter = new ArrayAdapter<String> (getActivity(),R.layout.list_item_movie,R.id.list_item_movie_textview,new ArrayList<String>());
-        //movieAdapter = new MoviePosterAdapter(getActivity());
+        //movieAdapter = new ArrayAdapter<String>(getActivity(),R.layout.list_item_movie,R.id.list_item_movie_textview,new ArrayList<String>());
+        movieAdapter = new MoviePosterAdapter(getActivity(), new ArrayList<MoviePoster>());
+        // movieAdapter = new MoviePosterAdapter(getActivity(), Arrays.asList(moviePosters));
         View rootView = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(movieAdapter);
-        //ListView listView = (ListView) rootView.findViewById(R.id.listview_movies);
-        //listView.setAdapter(movieAdapter);
 
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("LOGTAG", "clicked");
+            }
+        });
         return rootView;
     }
     private void updateMovies(){
@@ -101,39 +123,23 @@ public class MovieFragment extends Fragment{
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
-            final String OWM_LIST = "results";
-            //final String OWM_DESCRIPTION = "main";
+            final String API_RESULTS = "results";
 
             JSONObject movieJson = new JSONObject(moviesJsonStr);
-            JSONArray moviesArray = movieJson.getJSONArray(OWM_LIST);
-
+            JSONArray moviesArray = movieJson.getJSONArray(API_RESULTS);
 
             String[] resultStrs = new String[moviesArray.length()];
             for(int i = 0; i < moviesArray.length(); i++) {
                 String poster_path;
                 String movie_title;
-               // String description;
 
                 // Get the JSON object representing the movie
                 JSONObject movie = moviesArray.getJSONObject(i);
                 movie_title = movie.getString("title");
 
                 poster_path = movie.getString("poster_path");
-                // description is in a child array called "weather", which is 1 element long.
-                //JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-                //description = weatherObject.getString(OWM_DESCRIPTION);
-
-                // Temperatures are in a child object called "temp".  Try not to name variables
-                // "temp" when working with temperature.  It confuses everybody.
-                //JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-                //double high = temperatureObject.getDouble(OWM_MAX);
-                //double low = temperatureObject.getDouble(OWM_MIN);
-
-                //highAndLow = high + "/" + low;
-                resultStrs[i] = movie_title + " => " + poster_path;
-                //Target imageView = (Target) ImageView R.id.imageView;
-                Log.v(LOG_TAG," titles: " + resultStrs[i]);
-                //Picasso.with(getActivity()).load("http://i.imgur.com/DVpvklR.png").into(imageView);
+                resultStrs[i] = poster_path;
+                Log.v(LOG_TAG," titles: " + movie_title + " => " + resultStrs[i]);
             }
 
             return resultStrs;
@@ -141,7 +147,6 @@ public class MovieFragment extends Fragment{
         }
         @Override
         protected String[] doInBackground(String...params){
-            // if no zip, do nothing
             if(params.length == 0){
                 return null;
             }
@@ -156,19 +161,10 @@ public class MovieFragment extends Fragment{
 
             int numDays = 7;
             try {
-                // Construct the URL for themoviedb.org query
-                // https://api.themoviedb.org/3/movie/550?api_key=###
-                // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-                final String API_SIZE = "w185"; // recommended
-
-                //TODO: replace API_POSTERPATH with value retrieved from API
-                final String API_POSTERPATH = "q";
-
 
                 final String API_SORTBY = "sort_by";
                 final String API_KEY = "api_key";
                 final String BASE_URL = "https://api.themoviedb.org/3/movie/popular";
-                //final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(API_SORTBY, sortBy)
@@ -176,8 +172,8 @@ public class MovieFragment extends Fragment{
                         .build();
 
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "URI:" + url);
-                // Create the request to OpenWeatherMap, and open the connection
+
+                // Create the request to themoviedb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -205,7 +201,7 @@ public class MovieFragment extends Fragment{
                 movieDBJsonStr = buffer.toString();
 
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error ", e);
+                Log.e(LOG_TAG, "Error line 201", e);
                 // If the code didn't successfully get the movie data, there's no point in attempting
                 // to parse it.
                 movieDBJsonStr = null;
@@ -226,20 +222,22 @@ public class MovieFragment extends Fragment{
                 Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
                 return getMovieDBDataFromJson(movieDBJsonStr, numDays);
             } catch (JSONException e) {
-                Log.e(LOG_TAG, e.getMessage(), e);
+                Log.e(LOG_TAG, " line 222:" + e.getMessage(), e);
                 e.printStackTrace();
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(String[] result){
             if (result != null){
-                movieAdapter.clear();
+               movieAdapter.clear();
                 for(String movieInfoStr : result) {
-                    movieAdapter.add(movieInfoStr);
+                    movieAdapter.add(new MoviePoster(movieInfoStr));
                 }
             }
         }
+
 
     }
 }
