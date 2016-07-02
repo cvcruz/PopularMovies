@@ -5,7 +5,6 @@ package com.cecilevcruz.popularmovies;
  */
 
 import android.net.Uri;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +48,6 @@ public class MoviePoster extends ArrayList<MoviePoster> {
                 .appendPath(API_SIZE)
                 .appendEncodedPath(imageSrc)
                 .build();
-        Log.v(LOG_TAG," image URI:" + imageUri.toString());
         return imageUri;
     }
 
