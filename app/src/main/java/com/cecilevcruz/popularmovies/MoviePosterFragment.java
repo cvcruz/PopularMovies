@@ -76,8 +76,12 @@ public class MoviePosterFragment extends Fragment{
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                String title = movieAdapter.getItem(i).imgSrc;
-                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, title);
+                //ArrayList<MoviePoster> movieDetails = movieAdapter.getItem(i);
+
+                String poster = (movieAdapter.getItem(i).imgSrc).toString();
+                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, poster);
+                //Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, title);
+                //Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putStringArrayListExtra(movieDetails);
                 startActivity(movieDetailIntent);
             }
         });

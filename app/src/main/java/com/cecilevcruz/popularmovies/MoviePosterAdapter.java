@@ -1,7 +1,6 @@
 package com.cecilevcruz.popularmovies;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,18 +52,7 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
         }
 
         ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_icon);
-
-        // Construct the URL for themoviedb.org query
-        // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-        final String API_SIZE = "w185"; // recommended
-        final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-
-        Uri imageUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
-                .appendPath(API_SIZE)
-                .appendEncodedPath(moviePoster.imgSrc)
-                .build();
-        //Log.v(LOG_TAG,"img uri:" + imageUri);
-        Picasso.with(getContext()).load(imageUri).into(iconView);
+        Picasso.with(getContext()).load(moviePoster.imgSrc).into(iconView);
         return convertView;
     }
 }
