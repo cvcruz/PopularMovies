@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_search_options">
+        <item>@string/pref_search_popular</item>
+        <item>@string/pref_search_top_rated_label</item>
+    </array>
+
+    <array name="pref_search_values">
+        <item>@string/pref_search_popular</item>
+        <item>top_rated</item>
+    </array>
+</resources>

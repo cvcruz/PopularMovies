@@ -11,6 +11,9 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:numColumns="auto_fit"
+        android:clickable="true"
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp"
         android:stretchMode="columnWidth"
         android:gravity="center">
 
@@ -21,7 +24,9 @@
     <ImageView
         android:id="@+id/list_item_icon"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_width="match_parent"
+
+        android:clickable="true"/>
 
     <ListView
          android:id="@+id/listview_movies"

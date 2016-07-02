@@ -1,5 +1,6 @@
 package com.cecilevcruz.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -31,23 +32,9 @@ import java.util.ArrayList;
 public class MoviePosterFragment extends Fragment{
 
     MoviePoster moviePosters;
-/*
-    MoviePoster[] moviePosters = {
-            new MoviePoster( R.drawable.cupcake),
-            new MoviePoster( R.drawable.donut),
-            new MoviePoster( R.drawable.eclair),
-            new MoviePoster( R.drawable.froyo),
-            new MoviePoster( R.drawable.gingerbread),
-            new MoviePoster( R.drawable.honeycomb),
-            new MoviePoster( R.drawable.icecream),
-            new MoviePoster( R.drawable.jellybean),
-            new MoviePoster( R.drawable.kitkat),
-            new MoviePoster( R.drawable.lollipop)
-    };
-*/
+
     protected MoviePosterAdapter movieAdapter;
-   // protected MoviePosterAdapter movieAdapter;
-    //protected MoviePosterAdapter movieAdapter;
+
 
     public MoviePosterFragment() {
     }
@@ -69,13 +56,7 @@ public class MoviePosterFragment extends Fragment{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        /*
-        if(id==R.id.action_refresh){
-            updateWeather();
-            return true;
 
-        }
-*/
         //noinspection SimplifiableIfStatement
         /*
         if (id == R.id.action_settings) {
@@ -87,28 +68,24 @@ public class MoviePosterFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //movieAdapter = new ArrayAdapter<String>(getActivity(),R.layout.list_item_movie,R.id.list_item_movie_textview,new ArrayList<String>());
         movieAdapter = new MoviePosterAdapter(getActivity(), new ArrayList<MoviePoster>());
-        // movieAdapter = new MoviePosterAdapter(getActivity(), Arrays.asList(moviePosters));
         View rootView = inflater.inflate(R.layout.fragment_movie_grid, container, false);
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(movieAdapter);
-
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("LOGTAG", "clicked");
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
             }
         });
         return rootView;
     }
     private void updateMovies(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        //String location = prefs.getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
+        String searchBy = prefs.getString(getString(R.string.pref_search_key),getString(R.string.pref_search_default));
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-        fetchMoviesTask.execute("popular");
+        fetchMoviesTask.execute(searchBy);
     }
 
     @Override
@@ -139,7 +116,7 @@ public class MoviePosterFragment extends Fragment{
 
                 poster_path = movie.getString("poster_path");
                 resultStrs[i] = poster_path;
-                Log.v(LOG_TAG," titles: " + movie_title + " => " + resultStrs[i]);
+                //Log.v(LOG_TAG," titles: " + movie_title + " => " + resultStrs[i]);
             }
 
             return resultStrs;
@@ -157,22 +134,21 @@ public class MoviePosterFragment extends Fragment{
 
             // Will contain the raw JSON response as a string.
             String movieDBJsonStr = null;
-            String sortBy = params[0] + ".desc";
 
-            int numDays = 7;
+            int numMovies = 10;
             try {
 
                 final String API_SORTBY = "sort_by";
                 final String API_KEY = "api_key";
-                final String BASE_URL = "https://api.themoviedb.org/3/movie/popular";
+                final String BASE_URL = "http://api.themoviedb.org/3/movie";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                        .appendQueryParameter(API_SORTBY, sortBy)
+                        .appendPath(params[0].toLowerCase())
                         .appendQueryParameter(API_KEY, BuildConfig.MOVIEDB_API_KEY)
                         .build();
 
                 URL url = new URL(builtUri.toString());
-
+                Log.v(LOG_TAG,"URL:" + url);
                 // Create the request to themoviedb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -220,7 +196,7 @@ public class MoviePosterFragment extends Fragment{
 
             try {
                 Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
-                return getMovieDBDataFromJson(movieDBJsonStr, numDays);
+                return getMovieDBDataFromJson(movieDBJsonStr, numMovies);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, " line 222:" + e.getMessage(), e);
                 e.printStackTrace();
@@ -237,7 +213,5 @@ public class MoviePosterFragment extends Fragment{
                 }
             }
         }
-
-
     }
 }

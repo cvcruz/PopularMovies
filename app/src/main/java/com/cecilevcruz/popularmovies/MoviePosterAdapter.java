@@ -13,8 +13,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
+public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
     private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
+
+    Activity context;
 
     /**
      * @param context        The current context. Used to inflate the layout file.
@@ -53,7 +55,6 @@ class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
         ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_icon);
 
         // Construct the URL for themoviedb.org query
-        // https://api.themoviedb.org/3/movie/550?api_key=###
         // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
         final String API_SIZE = "w185"; // recommended
         final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";

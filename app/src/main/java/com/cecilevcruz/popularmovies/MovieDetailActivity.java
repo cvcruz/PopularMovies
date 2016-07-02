@@ -3,7 +3,7 @@ package com.cecilevcruz.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 
 
-public class MovieDetail extends ActionBarActivity {
+public class MovieDetailActivity extends AppCompatActivity {
 
     private ShareActionProvider mShareActionProvider;
 
@@ -51,7 +51,7 @@ public class MovieDetail extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(this,SettingsActivity.class));
             return true;
         }
 
