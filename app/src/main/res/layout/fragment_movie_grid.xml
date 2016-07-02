@@ -15,7 +15,7 @@
         android:clickable="true"
         android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp"
-        android:stretchMode="columnWidth"
+
 
         android:gravity="center">
 

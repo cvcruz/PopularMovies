@@ -79,8 +79,11 @@ public class MoviePosterFragment extends Fragment{
                 //ArrayList<MoviePoster> movieDetails = movieAdapter.getItem(i);
 
                 String poster = (movieAdapter.getItem(i).imgSrc).toString();
-                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, poster);
-                //Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, title);
+                String title = movieAdapter.getItem(i).title;
+                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, poster)
+                        .putExtra(Intent.EXTRA_TEXT + "_title", title)
+                        .putExtra(Intent.EXTRA_TEXT + "_overview", movieAdapter.getItem(i).overview)
+                        .putExtra(Intent.EXTRA_TEXT + "_releaseDate", movieAdapter.getItem(i).releaseDate);
                 //Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putStringArrayListExtra(movieDetails);
                 startActivity(movieDetailIntent);
             }
@@ -99,10 +102,10 @@ public class MoviePosterFragment extends Fragment{
         super.onStart();
         updateMovies();
     }
-    public class FetchMoviesTask extends AsyncTask<String, Void, String[]>{
+    public class FetchMoviesTask extends AsyncTask<String, Void, JSONArray>{
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
-        private String[] getMovieDBDataFromJson(String moviesJsonStr, int numDays)
+        private JSONArray getMovieDBDataFromJson(String moviesJsonStr, int numDays)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -125,11 +128,11 @@ public class MoviePosterFragment extends Fragment{
                 //Log.v(LOG_TAG," titles: " + movie_title + " => " + resultStrs[i]);
             }
 
-            return resultStrs;
+            return moviesArray;
 
         }
         @Override
-        protected String[] doInBackground(String...params){
+        protected JSONArray doInBackground(String...params){
             if(params.length == 0){
                 return null;
             }
@@ -153,9 +156,8 @@ public class MoviePosterFragment extends Fragment{
                         .appendQueryParameter(API_KEY, BuildConfig.MOVIEDB_API_KEY)
                         .build();
 
-                URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG,"URL:" + url);
                 // Create the request to themoviedb, and open the connection
+                URL url = new URL(builtUri.toString());
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -183,7 +185,7 @@ public class MoviePosterFragment extends Fragment{
                 movieDBJsonStr = buffer.toString();
 
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error line 201", e);
+                Log.e(LOG_TAG, "IOException", e);
                 // If the code didn't successfully get the movie data, there's no point in attempting
                 // to parse it.
                 movieDBJsonStr = null;
@@ -195,7 +197,7 @@ public class MoviePosterFragment extends Fragment{
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e(LOG_TAG, "Error closing stream", e);
+                        Log.e(LOG_TAG, "IOException: Error closing stream", e);
                     }
                 }
             }
@@ -211,11 +213,15 @@ public class MoviePosterFragment extends Fragment{
         }
 
         @Override
-        protected void onPostExecute(String[] result){
+        protected void onPostExecute(JSONArray result){
             if (result != null){
                movieAdapter.clear();
-                for(String movieInfoStr : result) {
-                    movieAdapter.add(new MoviePoster(movieInfoStr));
+                for(int i = 0; i < result.length(); i++) {
+                    try {
+                        movieAdapter.add(new MoviePoster(result.getJSONObject(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

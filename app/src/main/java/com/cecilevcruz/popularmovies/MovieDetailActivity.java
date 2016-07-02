@@ -41,8 +41,6 @@ public class MovieDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -85,8 +83,16 @@ public class MovieDetailActivity extends ActionBarActivity {
             if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 movieInfoStr = intent.getStringExtra(Intent.EXTRA_TEXT);
                 Uri posterUri = Uri.parse(movieInfoStr);
-                Picasso.with(getContext()).load(posterUri).into((ImageView) rootView.findViewById(R.id.list_item_icon));
-                ((TextView) rootView.findViewById(R.id.detail_text)).setText(movieInfoStr);
+                String title = intent.getStringExtra(Intent.EXTRA_TEXT + "_title");
+                String overview = intent.getStringExtra(Intent.EXTRA_TEXT + "_overview");
+                double avgVote = intent.getDoubleExtra(Intent.EXTRA_TEXT + "_avgVote",0);
+                String releaseDate = intent.getStringExtra(Intent.EXTRA_TEXT + "_releaseDate");
+
+                Picasso.with(getContext()).load(posterUri).into((ImageView) rootView.findViewById(R.id.detail_poster));
+                ((TextView) rootView.findViewById(R.id.detail_title)).setText(title);
+                ((TextView) rootView.findViewById(R.id.detail_overview)).setText(overview);
+                ((TextView) rootView.findViewById(R.id.detail_avgVote)).setText("Average Vote: " + avgVote);
+                ((TextView) rootView.findViewById(R.id.detail_releaseDate)).setText("Release Date: " + releaseDate);
             }
             return rootView;
         }
