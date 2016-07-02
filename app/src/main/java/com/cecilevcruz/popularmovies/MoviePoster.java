@@ -11,9 +11,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by poornima-udacity on 6/26/15.
- */
 public class MoviePoster extends ArrayList<MoviePoster> {
     private String LOG_TAG = MoviePoster.class.getSimpleName();
     /*
@@ -27,12 +24,17 @@ public class MoviePoster extends ArrayList<MoviePoster> {
     double avgVote;
 
     public MoviePoster(JSONObject movie) {
+        final String API_KEY_TITLE = "title";
+        final String API_KEY_SYNOPSIS = "overview";
+        final String API_KEY_AVGVOTE= "vote_average";
+        final String API_KEY_RELEASEDATE= "release_date";
+
         try {
             this.imgSrc = getMoviePosterUri(movie.getString("poster_path"));
-            this.title = movie.getString("title");
-            this.overview = movie.getString("overview");
-            this.avgVote = movie.getDouble("vote_average");
-            this.releaseDate = movie.getString("release_date");
+            this.title = movie.getString(API_KEY_TITLE);
+            this.overview = movie.getString(API_KEY_SYNOPSIS);
+            this.avgVote = movie.getDouble(API_KEY_AVGVOTE);
+            this.releaseDate = movie.getString(API_KEY_RELEASEDATE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -41,7 +43,7 @@ public class MoviePoster extends ArrayList<MoviePoster> {
     public Uri getMoviePosterUri(String imageSrc){
         // Construct the URL for themoviedb.org query
         // available sizes: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
-        final String API_SIZE = "w500"; // recommended
+        final String API_SIZE = "w500";
         final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
         Uri imageUri = Uri.parse(IMAGE_BASE_URL).buildUpon()

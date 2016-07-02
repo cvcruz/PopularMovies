@@ -46,11 +46,6 @@ public class MoviePosterFragment extends Fragment{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,9 +71,6 @@ public class MoviePosterFragment extends Fragment{
         return rootView;
     }
     private void updateMovies(String searchBy){
-
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //String searchBy = prefs.getString(getString(R.string.pref_search_key),getString(R.string.pref_search_default));
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
         fetchMoviesTask.execute(searchBy);
     }
@@ -90,9 +82,7 @@ public class MoviePosterFragment extends Fragment{
         Intent intent = getActivity().getIntent();
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             searchBy = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.v("*************", " intent searchby " + searchBy);
         }
-        Log.v("*************", " searchby " + searchBy);
         updateMovies(searchBy);
     }
     public class FetchMoviesTask extends AsyncTask<String, Void, JSONArray>{
@@ -142,7 +132,6 @@ public class MoviePosterFragment extends Fragment{
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
-                    // Nothing to do.
                     Log.v(LOG_TAG,"input stream null");
                     movieDBJsonStr = null;
                 }
@@ -155,7 +144,6 @@ public class MoviePosterFragment extends Fragment{
 
                 if (buffer.length() == 0) {
                     Log.v(LOG_TAG,"Stream was empty.  No point in parsing");
-                    // Stream was empty.  No point in parsing.
                     movieDBJsonStr = null;
                 }
                 movieDBJsonStr = buffer.toString();
@@ -179,7 +167,6 @@ public class MoviePosterFragment extends Fragment{
             }
 
             try {
-                //Log.v(LOG_TAG,"moviesDB json:" + movieDBJsonStr);
                 return getMovieDBDataFromJson(movieDBJsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);

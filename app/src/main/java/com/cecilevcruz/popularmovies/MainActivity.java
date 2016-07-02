@@ -34,14 +34,12 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_popular) {
             reloadMovies("popular");
             return true;
         }
         if (id == R.id.action_top_rated) {
             reloadMovies("top_rated");
-
             return true;
         }
         return super.onOptionsItemSelected(item);
