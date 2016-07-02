@@ -46,8 +46,7 @@ public class MoviePosterFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //inflater.inflate(R.menu.forecastfragment, menu);
+
     }
 
     @Override
@@ -57,12 +56,6 @@ public class MoviePosterFragment extends Fragment{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        /*
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
         return super.onOptionsItemSelected(item);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,15 +69,12 @@ public class MoviePosterFragment extends Fragment{
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                //ArrayList<MoviePoster> movieDetails = movieAdapter.getItem(i);
-
                 String poster = (movieAdapter.getItem(i).imgSrc).toString();
                 String title = movieAdapter.getItem(i).title;
                 Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, poster)
                         .putExtra(Intent.EXTRA_TEXT + "_title", title)
                         .putExtra(Intent.EXTRA_TEXT + "_overview", movieAdapter.getItem(i).overview)
                         .putExtra(Intent.EXTRA_TEXT + "_releaseDate", movieAdapter.getItem(i).releaseDate);
-                //Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putStringArrayListExtra(movieDetails);
                 startActivity(movieDetailIntent);
             }
         });
@@ -113,21 +103,6 @@ public class MoviePosterFragment extends Fragment{
 
             JSONObject movieJson = new JSONObject(moviesJsonStr);
             JSONArray moviesArray = movieJson.getJSONArray(API_RESULTS);
-
-            String[] resultStrs = new String[moviesArray.length()];
-            for(int i = 0; i < moviesArray.length(); i++) {
-                String poster_path;
-                String movie_title;
-
-                // Get the JSON object representing the movie
-                JSONObject movie = moviesArray.getJSONObject(i);
-                movie_title = movie.getString("title");
-
-                poster_path = movie.getString("poster_path");
-                resultStrs[i] = poster_path;
-                //Log.v(LOG_TAG," titles: " + movie_title + " => " + resultStrs[i]);
-            }
-
             return moviesArray;
 
         }

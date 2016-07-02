@@ -5,6 +5,7 @@ package com.cecilevcruz.popularmovies;
  */
 
 import android.net.Uri;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * Created by poornima-udacity on 6/26/15.
  */
 public class MoviePoster extends ArrayList<MoviePoster> {
-
+    private String LOG_TAG = MoviePoster.class.getSimpleName();
     /*
     Movie details layout contains title, release date, movie poster, vote average, and plot synopsis.
     */
@@ -48,6 +49,7 @@ public class MoviePoster extends ArrayList<MoviePoster> {
                 .appendPath(API_SIZE)
                 .appendEncodedPath(imageSrc)
                 .build();
+        Log.v(LOG_TAG," image URI:" + imageUri.toString());
         return imageUri;
     }
 
