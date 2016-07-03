@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_popular) {
-            reloadMovies("popular");
+            reloadMovies(getString(R.string.pref_search_default));
             return true;
         }
         if (id == R.id.action_top_rated) {
-            reloadMovies("top_rated");
+            reloadMovies(getString(R.string.pref_search_top_rated));
             return true;
         }
         return super.onOptionsItemSelected(item);
