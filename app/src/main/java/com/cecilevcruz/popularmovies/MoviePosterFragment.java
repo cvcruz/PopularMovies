@@ -80,7 +80,7 @@ public class MoviePosterFragment extends Fragment{
             fetchMoviesTask.execute(searchBy);
         }
         else {
-            Toast.makeText(getActivity(),R.string.error_no_network,Toast.LENGTH_SHORT).show();
+            showNetworkError();
         }
     }
 
@@ -200,7 +200,7 @@ public class MoviePosterFragment extends Fragment{
                 }
             }
             else {
-                Toast.makeText(getActivity(),R.string.error_no_network, Toast.LENGTH_SHORT).show();
+                showNetworkError();
             }
         }
     }
@@ -208,5 +208,8 @@ public class MoviePosterFragment extends Fragment{
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService (Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    private void showNetworkError(){
+        Toast.makeText(getActivity(),R.string.error_no_network, Toast.LENGTH_SHORT).show();
     }
 }
