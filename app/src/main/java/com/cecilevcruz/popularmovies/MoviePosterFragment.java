@@ -1,6 +1,9 @@
 package com.cecilevcruz.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,8 +75,13 @@ public class MoviePosterFragment extends Fragment{
         return rootView;
     }
     private void updateMovies(String searchBy){
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-        fetchMoviesTask.execute(searchBy);
+        if(isNetworkAvailable()) {
+            FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+            fetchMoviesTask.execute(searchBy);
+        }
+        else {
+            Toast.makeText(getActivity(),R.string.error_no_network,Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -93,11 +102,14 @@ public class MoviePosterFragment extends Fragment{
 
             // These are the names of the JSON objects that need to be extracted.
             final String API_RESULTS = "results";
-
-            JSONObject movieJson = new JSONObject(moviesJsonStr);
-            JSONArray moviesArray = movieJson.getJSONArray(API_RESULTS);
-            return moviesArray;
-
+            if(moviesJsonStr != null) {
+                JSONObject movieJson = new JSONObject(moviesJsonStr);
+                JSONArray moviesArray = movieJson.getJSONArray(API_RESULTS);
+                return moviesArray;
+            }
+            else {
+                return null;
+            }
         }
         @Override
         protected JSONArray doInBackground(String...params){
@@ -187,6 +199,14 @@ public class MoviePosterFragment extends Fragment{
                     }
                 }
             }
+            else {
+                Toast.makeText(getActivity(),R.string.error_no_network, Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
