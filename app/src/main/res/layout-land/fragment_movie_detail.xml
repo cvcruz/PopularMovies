@@ -24,7 +24,7 @@
         android:id="@+id/detail_poster"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:paddingTop="5dp"
+        android:paddingTop="16dp"
         android:paddingRight="16dp"
 
          />
@@ -32,7 +32,7 @@
     <TextView android:id="@+id/detail_title"
 
         android:layout_toRightOf="@+id/detail_poster"
-        android:paddingTop="5dp"
+        android:paddingTop="16dp"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_width="wrap_content"
