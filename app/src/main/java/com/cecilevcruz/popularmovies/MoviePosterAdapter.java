@@ -1,7 +1,6 @@
 package com.cecilevcruz.popularmovies;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -40,16 +39,10 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
         // Gets the moviePoster object from the ArrayAdapter at the appropriate position
         MoviePoster moviePoster = getItem(position);
 
-        // Adapters recycle views to AdapterViews.
-        // If this is a new View object we're getting, then inflate the layout.
-        // If not, this view already has the layout inflated from a previous call to getView,
-        // and we modify the View widgets as usual.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_movie_grid, parent, false);
+            convertView = new ImageView(getContext());
         }
-
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.movie_poster);
-        Picasso.with(getContext()).load(moviePoster.imgSrc).into(iconView);
+        Picasso.with(getContext()).load(moviePoster.imgSrc).into((ImageView) convertView);
         return convertView;
     }
 }
