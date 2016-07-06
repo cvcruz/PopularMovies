@@ -45,11 +45,21 @@ public class MoviePosterFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+// Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.main, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_popular) {
+            // reloadMovies(getString(R.string.pref_search_default));
+            updateMovies(getString(R.string.pref_search_default));
+        }
+        if (id == R.id.action_top_rated) {
+            //reloadMovies(getString(R.string.pref_search_top_rated));
+            updateMovies(getString(R.string.pref_search_top_rated));
+        }
         return super.onOptionsItemSelected(item);
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,10 +99,6 @@ public class MoviePosterFragment extends Fragment{
     public void onStart(){
         super.onStart();
         String searchBy = getString(R.string.pref_search_default);
-        Intent intent = getActivity().getIntent();
-        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            searchBy = intent.getStringExtra(Intent.EXTRA_TEXT);
-        }
         updateMovies(searchBy);
     }
     public class FetchMoviesTask extends AsyncTask<String, Void, JSONArray>{
