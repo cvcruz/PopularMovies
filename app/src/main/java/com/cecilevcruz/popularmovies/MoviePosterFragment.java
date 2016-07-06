@@ -68,7 +68,8 @@ public class MoviePosterFragment extends Fragment{
                 Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class).putExtra(Intent.EXTRA_TEXT, poster)
                         .putExtra(Intent.EXTRA_TEXT + "_title", title)
                         .putExtra(Intent.EXTRA_TEXT + "_overview", movieAdapter.getItem(i).overview)
-                        .putExtra(Intent.EXTRA_TEXT + "_releaseDate", movieAdapter.getItem(i).releaseDate);
+                        .putExtra(Intent.EXTRA_TEXT + "_releaseDate", movieAdapter.getItem(i).releaseDate)
+                        .putExtra(Intent.EXTRA_TEXT + "_avgVote", movieAdapter.getItem(i).avgVote);
                 startActivity(movieDetailIntent);
             }
         });
